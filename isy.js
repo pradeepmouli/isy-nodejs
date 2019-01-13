@@ -106,7 +106,7 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
             subType = Number(deviceNode.childNamed('devtype').childNamed('cat').val);
         }
     }    
-    // Insteon Device Family    
+        // Insteon Device Family    
     if(familyId == 1) {
 
         // Dimmable Devices
@@ -121,10 +121,10 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
             // Special case appliance Lincs into outlets
             if(subType == 6 || subType == 9 || subType == 12 || subType == 23) {
                 return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET); 
-            // Outlet lincs 
+                    // Outlet lincs 
             } else if(subType == 8 || subType == 33) {
                 return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);                 
-            // Dual outlets    
+                    // Dual outlets    
             } else if(subType == 57) {
                 return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);                 
             } else {
@@ -149,7 +149,7 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
             if(subType == 6) {
                 if(subAddress == 1) {
                     return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_LOCK);
-                // Ignore subdevice which operates opposite for the locks 
+                        // Ignore subdevice which operates opposite for the locks 
                 } else {
                     return null;
                 }                                   
@@ -211,6 +211,7 @@ ISY.prototype.getElkAlarmPanel = function() {
 }
 
 ISY.prototype.loadNodes = function(result) {
+    
     var document = new xmldoc.XmlDocument(result);
     this.loadDevices(document);
     this.loadScenes(document);
@@ -240,6 +241,7 @@ ISY.prototype.loadScenes = function(document) {
 }
 
 ISY.prototype.loadDevices = function(document) {
+        
     var nodes = document.childrenNamed('node');
     for(var index = 0; index < nodes.length; index++) {
         var deviceAddress = nodes[index].childNamed('address').val;
@@ -250,7 +252,7 @@ ISY.prototype.loadDevices = function(document) {
         var enabled = nodes[index].childNamed('enabled').val;
         
         if(enabled !== 'false') {  
-            // Try fallback to new generic device identification when not specifically identified.  
+                // Try fallback to new generic device identification when not specifically identified.  
             if(deviceTypeInfo == null) {    
                 deviceTypeInfo = this.getDeviceTypeBasedOnISYTable(nodes[index]);
             }
@@ -316,13 +318,15 @@ ISY.prototype.loadDevices = function(document) {
                 this.deviceIndex[deviceAddress] = newDevice;
                 this.deviceList.push(newDevice);
                 if(nodes[index].childNamed('property') != null) {
+                            
                     this.handleISYStateUpdate(deviceAddress, nodes[index].childNamed('property').attr.value);
                 }
+              
             }
         } else {
             this.logger('Ignoring disabled device: '+deviceName);
         }
-    }      
+        } 
 }
 
 ISY.prototype.loadElkNodes = function(result) {
@@ -690,10 +694,22 @@ ISY.prototype.sendRestCommand = function(deviceAddress, command, parameter, hand
         username: this.userName,
         password: this.password
     }    
-    restler.get(uriToUse, options).on('complete', function(data, response) {
-        if(response.statusCode == 200) {
-            handleResult(true);
-        } else {
+        var that = this;
+        var retryAttempt = 0;
+        var retryTime = 50;
+
+        restler.get(uriToUse, options).on('complete', function (data, response) {
+            if (response.statusCode == 200) {
+                that.logger("ISY-JS: Command succeeded "+uriToUse);
+                handleResult(true);
+            } else if ((retryAttempt < 5) && (response.statusCode == 404)) {
+                that.logger(`ISY-JS: Command failed with ${response.statusCode}` +
+                            ` after ${retryAttempt} retries. Retrying in ${retryTime}` +
+                            ` at ${uriToUse}`);
+                retryAttempt++;
+                this.retry(retryTime);
+            } else {
+                that.logger("ISY-JS: Command failed "+response.statusCode+" "+uriToUse);
             handleResult(false);
         }
     });
