@@ -25,10 +25,10 @@ function isyTypeToTypeName(isyType,address) {
 				}
 			}
 			return isyDeviceTypeList[index];
-		}		
+		}
 	}
 	return null;
-} 
+}
 
 var ISY = function(address, username, password, elkEnabled, changeCallback, useHttps, scenesInDeviceList, enableDebugLogging, variableCallback) {
     this.address  = address;
@@ -105,8 +105,8 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
         if(deviceNode.childNamed('devtype').childNamed('cat') != null) {
             subType = Number(deviceNode.childNamed('devtype').childNamed('cat').val);
         }
-    }    
-        // Insteon Device Family    
+    }
+        // Insteon Device Family
     if(familyId == 1) {
 
         // Dimmable Devices
@@ -115,29 +115,29 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
             if(subType == 46 && subAddress == 2) {
                 return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_FAN);
             } else {
-                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_DIMMABLE_LIGHT); 
+                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_DIMMABLE_LIGHT);
             }
         } else if(mainType == 2) {
             // Special case appliance Lincs into outlets
             if(subType == 6 || subType == 9 || subType == 12 || subType == 23) {
-                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET); 
-                    // Outlet lincs 
+                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);
+                    // Outlet lincs
             } else if(subType == 8 || subType == 33) {
-                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);                 
-                    // Dual outlets    
+                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);
+                    // Dual outlets
             } else if(subType == 57) {
-                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);                 
+                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);
             } else {
-                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_LIGHT);                 
+                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_LIGHT);
             }
         // Sensors
         } else if(mainType == 7) {
             // I/O Lincs
             if(subType == 0) {
                 if(subAddress == 1) {
-                    return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_DOOR_WINDOW_SENSOR);                     
+                    return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_DOOR_WINDOW_SENSOR);
                 } else {
-                    return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);                                     
+                    return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_OUTLET);
                 }
             // Other sensors. Not yet supported
             } else {
@@ -149,10 +149,10 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
             if(subType == 6) {
                 if(subAddress == 1) {
                     return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_LOCK);
-                        // Ignore subdevice which operates opposite for the locks 
+                        // Ignore subdevice which operates opposite for the locks
                 } else {
                     return null;
-                }                                   
+                }
             // Other devices, going to guess they are similar to MorningLinc
             } else {
                 return null;
@@ -161,13 +161,13 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
             // Motion sensors
             if(subType == 1 || subType == 3) {
                 if(subAddress == 1) {
-                    return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_MOTION_SENSOR);                                                     
+                    return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_MOTION_SENSOR);
                 // Ignore battery level sensor and daylight sensor
                 } else {
-                    
+
                 }
             } else if(subType == 2 || subType == 9 || subType == 17) {
-                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_DOOR_WINDOW_SENSOR);                                                                     
+                return this.buildDeviceInfoRecord(isyType, "Insteon", this.DEVICE_TYPE_DOOR_WINDOW_SENSOR);
             // Smoke, leak sensors, don't yet know how to support
             } else {
                 return null;
@@ -182,19 +182,19 @@ ISY.prototype.getDeviceTypeBasedOnISYTable = function(deviceNode) {
         if(mainType == 4) {
             // Identified by user zwave on/off switch
             if(subType == 16) {
-                return this.buildDeviceInfoRecord(isyType, "ZWave", this.DEVICE_TYPE_LIGHT);                                                                     
+                return this.buildDeviceInfoRecord(isyType, "ZWave", this.DEVICE_TYPE_LIGHT);
             // Identified by user door lock
             } else if(subType == 111) {
-                return this.buildDeviceInfoRecord(isyType, "ZWave", this.DEVICE_TYPE_SECURE_LOCK);                                                                                     
+                return this.buildDeviceInfoRecord(isyType, "ZWave", this.DEVICE_TYPE_SECURE_LOCK);
             // This is a guess based on the naming in the ISY SDK
             } else if(subType == 109) {
-                return this.buildDeviceInfoRecord(isyType, "ZWave", this.DEVICE_TYPE_DIMMABLE_LIGHT);                                                                                                     
+                return this.buildDeviceInfoRecord(isyType, "ZWave", this.DEVICE_TYPE_DIMMABLE_LIGHT);
             // Otherwise we don't know how to handle
             } else {
                 return null;
             }
         }
-    } 
+    }
     return null;
 }
 
@@ -211,7 +211,7 @@ ISY.prototype.getElkAlarmPanel = function() {
 }
 
 ISY.prototype.loadNodes = function(result) {
-    
+
     var document = new xmldoc.XmlDocument(result);
     this.loadDevices(document);
     this.loadScenes(document);
@@ -241,7 +241,7 @@ ISY.prototype.loadScenes = function(document) {
 }
 
 ISY.prototype.loadDevices = function(document) {
-        
+
     var nodes = document.childrenNamed('node');
     for(var index = 0; index < nodes.length; index++) {
         var deviceAddress = nodes[index].childNamed('address').val;
@@ -250,10 +250,10 @@ ISY.prototype.loadDevices = function(document) {
         var newDevice = null;
         var deviceTypeInfo = isyTypeToTypeName(isyDeviceType, deviceAddress);
         var enabled = nodes[index].childNamed('enabled').val;
-        
-        if(enabled !== 'false') {  
-                // Try fallback to new generic device identification when not specifically identified.  
-            if(deviceTypeInfo == null) {    
+
+        if(enabled !== 'false') {
+                // Try fallback to new generic device identification when not specifically identified.
+            if(deviceTypeInfo == null) {
                 deviceTypeInfo = this.getDeviceTypeBasedOnISYTable(nodes[index]);
             }
             if(deviceTypeInfo != null) {
@@ -318,15 +318,15 @@ ISY.prototype.loadDevices = function(document) {
                 this.deviceIndex[deviceAddress] = newDevice;
                 this.deviceList.push(newDevice);
                 if(nodes[index].childNamed('property') != null) {
-                            
+
                     this.handleISYStateUpdate(deviceAddress, nodes[index].childNamed('property').attr.value);
                 }
-              
+
             }
         } else {
             this.logger('Ignoring disabled device: '+deviceName);
         }
-        } 
+        }
 }
 
 ISY.prototype.loadElkNodes = function(result) {
@@ -336,7 +336,7 @@ ISY.prototype.loadElkNodes = function(result) {
         var id = nodes[index].attr.id;
         var name = nodes[index].attr.name;
         var alarmDef = nodes[index].attr.alarmDef;
-        
+
         var newDevice = new elkDevice.ElkAlarmSensor(
             this,
             name,
@@ -344,7 +344,7 @@ ISY.prototype.loadElkNodes = function(result) {
             id,
             (alarmDef==17) ? this.DEVICE_TYPE_CO_SENSOR : this.DEVICE_TYPE_ALARM_DOOR_WINDOW_SENSOR);
         this.zoneMap[newDevice.zone] = newDevice;
-    }     
+    }
 }
 
 ISY.prototype.loadElkInitialStatus = function(result) {
@@ -352,7 +352,7 @@ ISY.prototype.loadElkInitialStatus = function(result) {
     var nodes = document.childrenNamed('ae');
     for(var index = 0; index < nodes.length; index++) {
         this.elkAlarmPanel.setFromAreaUpdate(nodes[index]);
-    }        
+    }
     nodes = document.childrenNamed('ze');
     for(var index = 0; index < nodes.length; index++) {
         var id = nodes[index].attr.zone;
@@ -360,7 +360,7 @@ ISY.prototype.loadElkInitialStatus = function(result) {
         if(zoneDevice != null) {
             zoneDevice.setFromZoneUpdate(nodes[index]);
             if(this.deviceIndex[zoneDevice.address] == null && zoneDevice.isPresent()) {
-                this.deviceList.push(zoneDevice);        
+                this.deviceList.push(zoneDevice);
                 this.deviceIndex[zoneDevice.address] = zoneDevice;
             }
         }
@@ -372,11 +372,11 @@ ISY.prototype.finishInitialize = function(success, initializeCompleted) {
     initializeCompleted();
     if(success) {
         if(this.elkEnabled) {
-            this.deviceList.push(this.elkAlarmPanel);            
+            this.deviceList.push(this.elkAlarmPanel);
         }
         this.guardianTimer = setInterval(this.guardian.bind(this), 60000);
-        this.initializeWebSocket(); 
-    }  
+        this.initializeWebSocket();
+    }
 }
 
 ISY.prototype.guardian = function() {
@@ -495,9 +495,9 @@ ISY.prototype.setVariableValues = function(result) {
 }
 
 ISY.prototype.initialize = function(initializeCompleted) {
-    
+
     var that = this;
-    
+
     var options = {
         username: this.userName,
         password: this.password
@@ -587,7 +587,7 @@ ISY.prototype.handleWebSocketMessage = function(event) {
                         this.nodeChangedHandler(zoneDevice);
                     }
                 }
-            }            
+            }
         } else if(controlElement == '_1') {
             if(actionValue == 6) {
                 var varNode = document.childNamed('eventInfo').childNamed('var');
@@ -606,7 +606,7 @@ ISY.prototype.handleWebSocketMessage = function(event) {
 
                     this.handleISYVariableUpdate(id, type, val, timeStamp);
                 }
-            } 
+            }
         }
     }
 }
@@ -616,17 +616,17 @@ ISY.prototype.initializeWebSocket = function() {
     var auth = 'Basic ' + new Buffer(this.userName + ':' + this.password).toString('base64');
 
     this.webSocket = new WebSocket.Client(
-	   "ws://"+this.address+"/rest/subscribe", 
+	   "ws://"+this.address+"/rest/subscribe",
 	   ["ISYSUB"],
 	   {
 		  headers: {
 		  	   "Origin": "com.universal-devices.websockets.isy",
-			 "Authorization": auth			
+			 "Authorization": auth
 		  }
 	   });
 
     this.lastActivity = new Date();
-	
+
     this.webSocket.on('message', function(event) {
         that.handleWebSocketMessage(event);
     });
@@ -662,7 +662,7 @@ ISY.prototype.handleISYStateUpdate = function(address, state) {
                             this.nodeChangedHandler(this.sceneList[index]);
                         }
                     }
-                }            
+                }
             }
         }
     }
@@ -672,28 +672,28 @@ ISY.prototype.sendISYCommand = function(path, handleResult) {
     var uriToUse = this.protocol+'://'+this.address+'/rest/'+path;
     this.logger("ISY-JS: Sending ISY command..."+uriToUse);
     var options = {
-        username: this.userName,
-        password: this.password
-        };
-        var that = this;
-        var retryAttempt = 0;
-        var retryTime = 50;
+    username: this.userName,
+    password: this.password
+    };
+    var that = this;
+    var retryAttempt = 0;
+    var retryTime = 50;
 
-        restler.get(uriToUse, options).on('complete', function (data, response) {
-            if (response.statusCode == 200) {
-                that.logger("ISY-JS: Command succeeded "+uriToUse);
-                handleResult(true);
-            } else if ((retryAttempt < 5) && (response.statusCode == 404)) {
-                that.logger(`ISY-JS: Command failed with ${response.statusCode}` +
-                            ` after ${retryAttempt} retries. Retrying in ${retryTime}` +
-                            ` at ${uriToUse}`);
-                retryAttempt++;
-                this.retry(retryTime);
-            } else {
-                that.logger("ISY-JS: Command failed "+response.statusCode+" "+uriToUse);
+    restler.get(uriToUse, options).on('complete', function (data, response) {
+        if (response.statusCode == 200) {
+            that.logger("ISY-JS: Command succeeded "+uriToUse);
+            handleResult(true);
+        } else if ((retryAttempt < 5) && (response.statusCode == 404)) {
+            that.logger(`ISY-JS: Command failed with ${response.statusCode}` +
+                        ` after ${retryAttempt} retries. Retrying in ${retryTime}` +
+                        ` at ${uriToUse}`);
+            retryAttempt++;
+            this.retry(retryTime);
+        } else {
+            that.logger("ISY-JS: Command failed "+response.statusCode+" "+uriToUse);
             handleResult(false);
         }
-    });    
+    });
 }
 
 ISY.prototype.sendRestCommand = function(deviceAddress, command, parameter, handleResult) {
@@ -705,23 +705,23 @@ ISY.prototype.sendRestCommand = function(deviceAddress, command, parameter, hand
     var options = {
         username: this.userName,
         password: this.password
-    }    
-        var that = this;
-        var retryAttempt = 0;
-        var retryTime = 50;
+    };
+    var that = this;
+    var retryAttempt = 0;
+    var retryTime = 50;
 
-        restler.get(uriToUse, options).on('complete', function (data, response) {
-            if (response.statusCode == 200) {
-                that.logger("ISY-JS: Command succeeded "+uriToUse);
-                handleResult(true);
-            } else if ((retryAttempt < 5) && (response.statusCode == 404)) {
-                that.logger(`ISY-JS: Command failed with ${response.statusCode}` +
-                            ` after ${retryAttempt} retries. Retrying in ${retryTime}` +
-                            ` at ${uriToUse}`);
-                retryAttempt++;
-                this.retry(retryTime);
-            } else {
-                that.logger("ISY-JS: Command failed "+response.statusCode+" "+uriToUse);
+    restler.get(uriToUse, options).on('complete', function (data, response) {
+        if (response.statusCode == 200) {
+            that.logger("ISY-JS: Command succeeded "+uriToUse);
+            handleResult(true);
+        } else if ((retryAttempt < 5) && (response.statusCode == 404)) {
+            that.logger(`ISY-JS: Command failed with ${response.statusCode}` +
+                        ` after ${retryAttempt} retries. Retrying in ${retryTime}` +
+                        ` at ${uriToUse}`);
+            retryAttempt++;
+            this.retry(retryTime);
+        } else {
+            that.logger("ISY-JS: Command failed "+response.statusCode+" "+uriToUse);
             handleResult(false);
         }
     });
@@ -733,7 +733,7 @@ ISY.prototype.sendGetVariable = function(id, type, handleResult) {
     var options = {
         username: this.userName,
         password: this.password
-    }    
+    }
     restler.get(uriToUse, options).on('complete', function(result, response) {
         if(response.statusCode == 200) {
             var document = new xmldoc.XmlDocument(result);
@@ -750,7 +750,7 @@ ISY.prototype.sendSetVariable = function(id, type, value, handleResult) {
     var options = {
         username: this.userName,
         password: this.password
-    }    
+    }
     restler.get(uriToUse, options).on('complete', function(result, response) {
         if(response.statusCode == 200) {
             handleResult(true);
