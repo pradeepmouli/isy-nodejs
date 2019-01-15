@@ -674,11 +674,23 @@ ISY.prototype.sendISYCommand = function(path, handleResult) {
     var options = {
         username: this.userName,
         password: this.password
-    }    
-    restler.get(uriToUse, options).on('complete', function(data, response) {
-        if(response.statusCode == 200) {
-            handleResult(true);
-        } else {
+        };
+        var that = this;
+        var retryAttempt = 0;
+        var retryTime = 50;
+
+        restler.get(uriToUse, options).on('complete', function (data, response) {
+            if (response.statusCode == 200) {
+                that.logger("ISY-JS: Command succeeded "+uriToUse);
+                handleResult(true);
+            } else if ((retryAttempt < 5) && (response.statusCode == 404)) {
+                that.logger(`ISY-JS: Command failed with ${response.statusCode}` +
+                            ` after ${retryAttempt} retries. Retrying in ${retryTime}` +
+                            ` at ${uriToUse}`);
+                retryAttempt++;
+                this.retry(retryTime);
+            } else {
+                that.logger("ISY-JS: Command failed "+response.statusCode+" "+uriToUse);
             handleResult(false);
         }
     });    
