@@ -45,7 +45,7 @@ export class ISYDevice extends ISYNode {
 					} (${this.formatted[prop.id]})`
 				);
 			}
-		} else {
+		} else if (node.property) {
 			this[node.property.id] = this.convertFrom(
 				Number(node.property.value),
 				Number(node.property.uom)
