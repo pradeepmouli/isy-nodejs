@@ -4,6 +4,15 @@ import { ISYBinaryStateDevice, ISYDevice, ISYLevelDevice } from './isydevice';
 import { byteToDegree, byteToPct, pctToByte } from './utils';
 
 export class InsteonBaseDevice extends ISYDevice {
+
+	productName: string
+	deviceType: any
+	batteryOperated: boolean
+	connectionType: any
+	deviceFriendlyName: string
+	childDevices: any
+	isDimmable: boolean
+
 	constructor(isy: ISY, node, productInfo) {
 		super(isy, node);
 		this.family = Families.Insteon;
@@ -43,7 +52,11 @@ export class InsteonBaseDevice extends ISYDevice {
 	}
 }
 
-export const InsteonLampDevice = (InsteonBaseDevice) =>
+interface InsteonBaseDeviceConstructor {
+	new(isy: ISY, node, productInfo): InsteonBaseDevice;
+}
+
+export const InsteonLampDevice = (InsteonBaseDevice:InsteonBaseDeviceConstructor) =>
 	class extends InsteonBaseDevice {
 		constructor(isy, node, productInfo) {
 			super(isy, node, productInfo);
@@ -56,8 +69,8 @@ export const InsteonLampDevice = (InsteonBaseDevice) =>
 
 		public updateBrightnessLevel(level, resultHandler) {
 			if (level !== this.brightnessLevel) {
-				this.isy.sendRestCommand(
-					this.address,
+				this.isy.sendNodeCommand(
+					this,
 					Commands.On,
 					pctToByte(level),
 					resultHandler
@@ -65,7 +78,7 @@ export const InsteonLampDevice = (InsteonBaseDevice) =>
 			}
 		}
 	};
-export const InsteonSwitchDevice = (InsteonBaseDevice) =>
+export const InsteonSwitchDevice = (InsteonBaseDevice:InsteonBaseDeviceConstructor) =>
 	class extends InsteonBaseDevice {
 		constructor(isy, node, productInfo) {
 			super(isy, node, productInfo);
@@ -81,7 +94,7 @@ export const InsteonSwitchDevice = (InsteonBaseDevice) =>
 				this.sendCommand(Commands.On, pctToByte(level), resultHandler);
 			}
 		}
-	};
+	}
 
 export class InsteonRelayDevice extends ISYBinaryStateDevice(
 	InsteonBaseDevice
@@ -249,6 +262,8 @@ export class InsteonCOSensorDevice extends ISYBinaryStateDevice(
 }
 
 export class InsteonMotionSensorDevice extends InsteonBaseDevice {
+	_isMotionDetected: boolean
+
 	constructor(isy, deviceNode, productInfo) {
 		super(isy, deviceNode, productInfo);
 		this._isMotionDetected = false;

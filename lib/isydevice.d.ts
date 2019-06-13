@@ -28,6 +28,7 @@ declare type Constructor<T> = new (...args: any[]) => T;
 export declare const ISYBinaryStateDevice: <T extends Constructor<ISYDevice>>(Base: T) => {
     new (...args: any[]): {
         [x: string]: any;
+        ST: number;
         readonly state: boolean;
         updateState(state: boolean): Promise<any>;
         readonly typeCode: string;
@@ -70,6 +71,7 @@ export declare const ISYBinaryStateDevice: <T extends Constructor<ISYDevice>>(Ba
 export declare const ISYLevelDevice: <T extends Constructor<ISYDevice>>(base: T) => {
     new (...args: any[]): {
         [x: string]: any;
+        ST: number;
         readonly level: number;
         updateLevel(level: number): Promise<any>;
         readonly typeCode: string;

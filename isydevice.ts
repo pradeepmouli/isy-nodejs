@@ -20,7 +20,7 @@ export class ISYDevice extends ISYNode {
 		super(isy, node);
 		this.nodeType = 1;
 		this.type = node.type;
-		this._enabled = node.enabled;
+		this.enabled = node.enabled;
 		this.deviceClass = node.deviceClass;
 		this.parentAddress = node.pnode;
 		const s = this.type.split('.');
@@ -190,6 +190,8 @@ export const ISYBinaryStateDevice = <T extends Constructor<ISYDevice>>(
 	Base: T
 ) => {
 	return class extends Base {
+		ST: number
+
 		get state(): boolean {
 			return this.ST > 0;
 		}
@@ -209,6 +211,8 @@ export const ISYBinaryStateDevice = <T extends Constructor<ISYDevice>>(
 
 export const ISYLevelDevice = <T extends Constructor<ISYDevice>>(base: T) =>
 	class extends base {
+		ST: number
+
 		get level(): number {
 			return this.ST;
 		}

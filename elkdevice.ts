@@ -6,6 +6,16 @@ import { ISYDevice } from './isydevice.js';
 //
 export class ELKAlarmPanelDevice extends ISYDevice
 {
+	area: any
+	alarmTripState: number
+	alarmState: number
+	alarmMode: number
+	deviceFriendlyName: string
+	deviceType: any
+	connectionType: string
+	batteryOperated: boolean
+	voltage: number
+
 	constructor(isy, area, node) {
 		super(isy,node)
 
@@ -111,6 +121,16 @@ ELKAlarmPanelDevice.prototype.ALARM_STATE_ARMED_WITH_BYPASS = 6;
 // ELKAlarmSensor
 //
 export class ElkAlarmSensorDevice extends ISYDevice {
+	area: any
+	zone: any
+	deviceFriendlyName: string
+	deviceType: any
+	connectionType: string
+	batteryOperated: boolean
+	physicalState: number
+	logicalState: number
+	voltage:  number
+
 	constructor(isy, name, area, zone, deviceType) {
 		super(isy,area)
 		
