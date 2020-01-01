@@ -370,5 +370,33 @@
         "deviceType": "Thermostat",
         "connectionType": "Insteon Wireless",
         "batteryOperated": false
+    }, {
+        "type": "2.21.55.0",
+        "address": "",
+        "name": "(2476S) SwitchLinc Relay W/ Sense v.37",
+        "deviceType": "Light",
+        "connectionType": "Insteon Wired",
+        "batteryOperated": false
+    }, {
+        "type": "5.11.16.0",
+        "address": "1",
+        "name": "(2441TH) Insteon Thermostat v.10",
+        "deviceType": "Thermostat",
+        "connectionType": "Insteon Wireless",
+        "batteryOperated": false
+    }, {
+        "type": "2.9.56.0",
+        "address": "",
+        "name": "(2456S3) ApplianceLinc v.38",
+        "deviceType": "Outlet",
+        "connectionType": "Insteon Wired",
+        "batteryOperated": false
+    }, {
+        "type": "2.8.55.0",
+        "address": "",
+        "name": "(2473) OutletLinc v.37",
+        "deviceType": "Outlet",
+        "connectionType": "Insteon Wired",
+        "batteryOperated": false
     }
 ]
