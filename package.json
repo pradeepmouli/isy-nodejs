@@ -36,7 +36,7 @@
   "dependencies": {
     "@npmcli/package-json": "^6.0.1",
     "@project-chip/matter-node.js": "^0.10.6",
-    "@project-chip/matter.js": "^0.10.6",
+    "@project-chip/matter.js": "^0.11.4",
     "camelcase": "^8.0.0",
     "humanize": "^0.0.9",
     "humanize-string": "^3.0.0"
