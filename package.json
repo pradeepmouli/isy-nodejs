@@ -41,7 +41,7 @@
 	"@matter/node": "0.11.4",
 	"@matter/nodejs": "0.11.4",
     "@npmcli/package-json": "^6.0.1",
-    "@project-chip/matter-node.js": "^0.11.4",
+    "@project-chip/matter-node.js": "^0.11.8",
     "@project-chip/matter.js": "^0.11.4",
     "camelcase": "^8.0.0",
     "humanize": "^0.0.9",
