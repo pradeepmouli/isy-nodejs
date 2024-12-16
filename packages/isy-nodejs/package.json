@@ -53,7 +53,7 @@
     "dependencies": {
         "@log4js-node/log4js-api": "^1.0.2",
         "@matter/general": "^0.11.4",
-        "@matter/types": "^0.11.4",
+        "@matter/types": "^0.11.9",
         "@project-chip/matter-node.js": "^0.11.4",
         "@project-chip/matter.js": "^0.11.4",
         "axios": "^1.7.7",
